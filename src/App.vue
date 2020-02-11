@@ -1,37 +1,43 @@
 <template>
   <div id="app">
-    <!-- <router-link to="/home" tag="li" replace>首页</router-link>
-    <router-link to="/tab" tag="li" replace>我是选项卡</router-link>
-    <router-view></router-view>
-    <button @click="homeClick">首页按钮</button>
-    <button @click="tabClick">首页按钮</button>-->
-    <router-link to="/home">首页</router-link>
-    <router-link to="/tab">选项卡</router-link>
-    <router-link v-bind:to="'/user/'+useId">用户</router-link>
-    <router-view></router-view>
+    <tab-bar>
+        <tab-bar-item>
+            <img src="~assets/img/tabbar/home.svg" alt="" slot="item-icon">
+            <img src="~assets/img/tabbar/home_active.svg" alt="" slot="item-icon-active">
+            <div slot="item-text">首页</div>
+        </tab-bar-item>
+        <tab-bar-item>
+          <img src="~assets/img/tabbar/category.svg" alt="" slot="item-icon">
+          <img src="~assets/img/tabbar/category_active.svg" alt="" slot="item-icon-active">
+          <div slot="item-text">分类</div>
+        </tab-bar-item>
+        <tab-bar-item>
+          <img src="~assets/img/tabbar/shopcart.svg" alt="" slot="item-icon">
+          <img src="~assets/img/tabbar/shopcart_active.svg" alt="" slot="item-icon-active">
+          <div slot="item-text">购物车</div>
+        </tab-bar-item>
+        <tab-bar-item>
+          <img src="~assets/img/tabbar/profile.svg" alt="" slot="item-icon">
+          <img src="~assets/img/tabbar/profile_active.svg" alt="" slot="item-icon-active">
+          <div slot="item-text">我的</div>
+        </tab-bar-item>
+    </tab-bar>
   </div>
 </template>
 
 <script>
+import TabBar from './components/tabbar/TabBar'
+import TabBarItem from './components/tabbar/TabBarItem'
 export default {
-  data() {
-    return{
-      useId:'zhangsan'
-    }
-  },
-  methods: {
-    // homeClick() {
-    //   this.$router.replace("/home");
-    // },
-    // tabClick() {
-    //   this.$router.replace("/tab");
-    // }
+  name:'App',
+  components:{
+    TabBar,
+    TabBarItem
   }
 };
 </script>
 
 <style>
-.active {
-  background: red;
-}
+  @import "assets/css/base.css";
+
 </style>
