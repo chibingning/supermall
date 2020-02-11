@@ -1,21 +1,41 @@
 <template>
-    <div class="tab-bar-item">
+    <div class="tab-bar-item" @click="itemClick">
       <div v-if="!isActive">
         <slot name="item-icon"></slot>
       </div>
-      <div else>
+      <div v-else>
         <slot name="item-icon-active"></slot>
       </div>
-      <div :class="{active:isActive}">
+      <div :style="activeStyle">
          <slot name="item-text"></slot>
       </div>
     </div>
 </template>
 <script>
 export default {
+  props:{
+    path:String,
+    activeColor:{
+       type:String,
+       default:'red'
+    }
+  },
   data(){
     return{
-      isActive:true
+      // isActive:true
+    }
+  },
+  computed:{
+    isActive(){
+        return this.$route.path.indexOf(this.path)!== -1    //$route当前活跃的路由
+    },
+    activeStyle(){
+        return this.isActive ? { color:this.activeColor} :{}
+    }
+  },
+  methods:{
+    itemClick(){
+      this.$router.replace(this.path);
     }
   }
 }
@@ -44,7 +64,5 @@ export default {
   margin-top:3px;
 }
 
-.active{
-  color: pink;
-}
+
 </style>
