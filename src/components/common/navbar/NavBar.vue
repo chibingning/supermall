@@ -32,8 +32,5 @@ export default {};
 .right {
   width: 60px;
 }
-.home-nav{
-    background:pink;
-    color: #fff;
-}
+
 </style>
