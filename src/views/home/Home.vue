@@ -5,7 +5,7 @@
       </nav-bar>
       <recommend-view :recommends="recommends"/>
       <feature/>
-      <tab-control :titles="titles"/>
+      <tab-control :titles="['流行','精选','时尚']"/>
       <ul>
           <li>1</li>
           <li>1</li>
@@ -56,10 +56,10 @@
 
 <script>
 import NavBar from 'components/common/navbar/NavBar'
-import {getHomeMultidata} from 'network/home'
 import RecommendView from './childComps/RecommendView'
 import Feature from './childComps/feature'
 import TabControl from 'components/content/tabControl/TabControl'
+import {getHomeMultidata,getHomeGoods} from 'network/home'
 export default {
     name:"home",
     components:{
@@ -74,17 +74,34 @@ export default {
             recommends:[],
             dKeyword:[],
             keywords:[],
-            titles:['流行','精选','时尚']
+            goods:{
+                'pop':{page:0,list:[]},
+                'new':{page:0,list:[]},
+                'sell':{page:0,list:[]},
+            }
+
         }
     },
     created(){
-        getHomeMultidata().then(res=>{
-            this.banner = res.data.banner.list;
-            this.recommends = res.data.recommend.list;
-            this.dKeyword = res.data.dKeyword.list;
-            this.keywords = res.data.keywords.list;
-
-        })
+        this.getHomeMultidata()
+        this.getHomeGoods('pop')
+    },
+    methods:{
+        getHomeMultidata(){
+            getHomeMultidata().then(res=>{
+                this.banner = res.data.banner.list;
+                this.recommends = res.data.recommend.list;
+                this.dKeyword = res.data.dKeyword.list;
+                this.keywords = res.data.keywords.list;
+            })
+        },
+        getHomeGoods(type){
+            const page = this.goods[type].page+1
+            getHomeGoods(type,page).then(res=>{
+                this.goods[type].list.push(...res.data.list)
+                this.goods[type].page += 1
+            })
+        }
     }
 }
 </script>
