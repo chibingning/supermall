@@ -50,6 +50,7 @@ export default {
     bottom: 0;
     width: 100%;
     box-shadow: 0px -3px 1px rbga(100, 100, 100, 0.2);
+    z-index:6;
   }
   .tab-bar-item {
     flex: 1;

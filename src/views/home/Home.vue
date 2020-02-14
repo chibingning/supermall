@@ -6,7 +6,8 @@
       <recommend-view :recommends="recommends"/>
       <feature/>
       <tab-control :titles="['流行','精选','时尚']"/>
-      <ul>
+     <good-list :goods="goods['pop'].list" />
+      <!-- <ul>
           <li>1</li>
           <li>1</li>
           <li>1</li>
@@ -49,7 +50,7 @@
           <li>1</li>
           <li>1</li>
           <li>1</li>
-      </ul>
+      </ul> -->
   </div>
 </template>
 
@@ -59,6 +60,9 @@ import NavBar from 'components/common/navbar/NavBar'
 import RecommendView from './childComps/RecommendView'
 import Feature from './childComps/feature'
 import TabControl from 'components/content/tabControl/TabControl'
+import GoodList from 'components/content/goods/GoodsList'
+
+
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 export default {
     name:"home",
@@ -66,7 +70,8 @@ export default {
         NavBar,
         RecommendView,
         Feature,
-        TabControl
+        TabControl,
+        GoodList
     },
     data(){
         return{
@@ -116,6 +121,7 @@ export default {
         top:0;
         left:0;
         right:0;
+        z-index:6
     }
-    .tab-control{ position:sticky; top:40px; }
+    .tab-control{ position:sticky; top:40px; z-index:6;}
 </style>
