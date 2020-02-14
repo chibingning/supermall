@@ -5,8 +5,8 @@
       </nav-bar>
       <recommend-view :recommends="recommends"/>
       <feature/>
-      <tab-control :titles="['流行','精选','时尚']"/>
-     <good-list :goods="goods['pop'].list" />
+      <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
+     <good-list :goods="showGoods" />
       <!-- <ul>
           <li>1</li>
           <li>1</li>
@@ -83,13 +83,21 @@ export default {
                 'pop':{page:0,list:[]},
                 'new':{page:0,list:[]},
                 'sell':{page:0,list:[]},
-            }
+            },
+            currentType:'pop',
 
+        }
+    },
+    computed:{
+        showGoods(){
+            return this.goods[this.currentType].list
         }
     },
     created(){
         this.getHomeMultidata()
         this.getHomeGoods('pop')
+        this.getHomeGoods('new')
+        this.getHomeGoods('sell')
     },
     methods:{
         getHomeMultidata(){
@@ -106,6 +114,31 @@ export default {
                 this.goods[type].list.push(...res.data.list)
                 this.goods[type].page += 1
             })
+        },
+        tabClick(index){
+            console.log(index);
+            // switch(index){
+            //     case 0:
+            //         this.currentType = 'pop'
+            //         break
+            //     case 1:
+            //         this.currentType = 'new'
+            //         break
+            //     case 2:
+            //         this.currentType = "sell"
+            //         break
+            // }
+            switch(index){
+                case 0:
+                this.currentType = 'pop'
+                break
+                case 1:
+                this.currentType = 'new'
+                break
+                case 2:
+                this.currentType = 'sell'
+                break
+            }
         }
     }
 }

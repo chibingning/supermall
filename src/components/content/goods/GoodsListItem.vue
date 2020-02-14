@@ -27,7 +27,7 @@ export default {
 <style scoped>
 .goods-list-item{ width: 48%;text-align: center; }
 .goods-list-item img{ width: 100%; border-radius:3px;}
-.goods-infor{ position: relative; top:-8px;  }
+.goods-infor{ position: relative; top:-8px; font-size:14px;  }
 .price,.collect{ position: relative; top:-8px;}
 .price{ color: var(--color-high-text); margin-right:23px;}
 .collect{ display: inline-block; padding-left:3px; color:#bfbfbf}
