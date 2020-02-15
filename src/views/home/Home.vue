@@ -3,54 +3,14 @@
       <nav-bar class="home-nav">
           <div slot="center">购物街</div>
       </nav-bar>
-      <recommend-view :recommends="recommends"/>
-      <feature/>
-      <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
-     <good-list :goods="showGoods" />
-      <!-- <ul>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-          <li>1</li>
-      </ul> -->
+
+    <scroll class="content">
+        <recommend-view :recommends="recommends"/>
+        <feature/>
+        <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
+        <good-list :goods="showGoods" />
+     </scroll>
+
   </div>
 </template>
 
@@ -61,7 +21,7 @@ import RecommendView from './childComps/RecommendView'
 import Feature from './childComps/feature'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodList from 'components/content/goods/GoodsList'
-
+import Scroll from 'components/common/scroll/Scroll'
 
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 export default {
@@ -71,7 +31,8 @@ export default {
         RecommendView,
         Feature,
         TabControl,
-        GoodList
+        GoodList,
+        Scroll
     },
     data(){
         return{
@@ -117,17 +78,6 @@ export default {
         },
         tabClick(index){
             console.log(index);
-            // switch(index){
-            //     case 0:
-            //         this.currentType = 'pop'
-            //         break
-            //     case 1:
-            //         this.currentType = 'new'
-            //         break
-            //     case 2:
-            //         this.currentType = "sell"
-            //         break
-            // }
             switch(index){
                 case 0:
                 this.currentType = 'pop'
@@ -145,8 +95,8 @@ export default {
 </script>
 
 
-<style >
-    #home{ padding-top:44px;}
+<style scoped>
+    #home{  position: relative; height: 100vh;}
     .home-nav{
          background-color: var(--color-tint);
         color: #fff;
@@ -157,4 +107,5 @@ export default {
         z-index:6
     }
     .tab-control{ position:sticky; top:40px; z-index:6;}
+    .content{ position:absolute; top:40px; bottom:51px; left:0; right:0;}
 </style>
