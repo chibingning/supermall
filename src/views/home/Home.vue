@@ -1,16 +1,17 @@
 <template>
   <div id="home">
-      <nav-bar class="home-nav">
-          <div slot="center">购物街</div>
-      </nav-bar>
+        <nav-bar class="home-nav">
+            <div slot="center">购物街</div>
+        </nav-bar>
 
-    <scroll class="content">
-        <recommend-view :recommends="recommends"/>
-        <feature/>
-        <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
-        <good-list :goods="showGoods" />
-     </scroll>
+        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow">
+            <recommend-view :recommends="recommends"/>
+            <feature/>
+            <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
+            <good-list :goods="showGoods" />
+        </scroll>
 
+        <back-top @click.native="backClick"  v-show="isShow" />
   </div>
 </template>
 
@@ -22,6 +23,7 @@ import Feature from './childComps/feature'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
+import BackTop from 'components/content/backTop/BackTop'
 
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 export default {
@@ -32,7 +34,9 @@ export default {
         Feature,
         TabControl,
         GoodList,
-        Scroll
+        Scroll,
+        BackTop
+
     },
     data(){
         return{
@@ -46,6 +50,7 @@ export default {
                 'sell':{page:0,list:[]},
             },
             currentType:'pop',
+            isShow:false
 
         }
     },
@@ -89,6 +94,12 @@ export default {
                 this.currentType = 'sell'
                 break
             }
+        },
+        backClick(){
+            this.$refs.scroll.scrollTo(0,0)
+        },
+        scrollShow(position){
+            this.isShow = -(position.y)>700
         }
     }
 }
@@ -108,4 +119,5 @@ export default {
     }
     .tab-control{ position:sticky; top:40px; z-index:6;}
     .content{ position:absolute; top:40px; bottom:51px; left:0; right:0;}
+
 </style>
