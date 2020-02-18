@@ -4,8 +4,8 @@
             <div slot="center">购物街</div>
         </nav-bar>
 
-        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow"  :pull-up-load="true"
-        @pullingUp="loadMore">
+        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow"  :pull-up-load="true">
+        <!-- @pullingUp="loadMore" -->
             <recommend-view :recommends="recommends"/>
             <feature/>
             <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
@@ -66,8 +66,33 @@ export default {
         this.getHomeGoods('pop')
         this.getHomeGoods('new')
         this.getHomeGoods('sell')
+
+
+
+    },
+    mounted(){
+
+     const refresh =  this.debounce(this.$refs.scroll.refresh)
+         //监听ITEM中的图片家宅完成
+        this.$bus.$on('itemImageLoad',()=>{
+            // console.log("---")
+            // this.$refs.scroll.refresh()
+            refresh()
+        })
     },
     methods:{
+
+        debounce(func,delay){
+            let timer = null
+            return function(...args){
+              if(timer) clearTimeout(timer)
+              timer = setTimeout(()=>{
+                  func.apply(this,args)
+              },delay)
+            }
+
+        },
+
         getHomeMultidata(){
             getHomeMultidata().then(res=>{
                 this.banner = res.data.banner.list;
@@ -81,11 +106,11 @@ export default {
             getHomeGoods(type,page).then(res=>{
                 this.goods[type].list.push(...res.data.list)
                 this.goods[type].page += 1
-                this.$refs.scroll.finishPullUp()
+                //this.$refs.scroll.finishPullUp()
             })
         },
         tabClick(index){
-            console.log(index);
+            console.log("间隔");
             switch(index){
                 case 0:
                 this.currentType = 'pop'
@@ -104,10 +129,10 @@ export default {
         scrollShow(position){
             this.isShow = -(position.y)>700
         },
-        loadMore(){
-              this.getHomeGoods(this.currentType)
-              this.$refs.scroll.scroll.refresh()
-        }
+        // loadMore(){
+        //       this.getHomeGoods(this.currentType)
+        //       this.$refs.scroll.scroll.refresh()
+        // }
     }
 }
 </script>
