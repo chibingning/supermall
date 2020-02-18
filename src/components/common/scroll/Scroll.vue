@@ -15,10 +15,10 @@ export default {
             type:Number,
             default:0
         },
-        // pullUpLoad:{
-        //     type:Boolean,
-        //     default:false
-        // }
+        pullUpLoad:{
+            type:Boolean,
+            default:false
+        }
     },
     data(){
         return{
@@ -31,17 +31,22 @@ export default {
         this.scroll = new BScroll(this.$refs.wrapper,{
             probeType:this.probeType,
             click:true,
-            //pullUpLoad:this.pullUpLoad
+            pullUpLoad:this.pullUpLoad
         })
     //监听滚动位置
+    if(this.probeType===2 || this.probeType===3){
         this.scroll.on('scroll',(position)=>{
             this.$emit("scroll",position);
         })
-    //监听上拉刷新
+    }
 
-    // this.scroll.on('pullingUp',()=>{
-    //     this.$emit('pullingUp')
-    // })
+    //监听上拉刷新
+    if(this.pullUpLoad){
+        this.scroll.on('pullingUp',()=>{
+            this.$emit('pullingUp')
+        })
+    }
+
 
     },
     methods:{
@@ -49,10 +54,10 @@ export default {
             this.scroll && this.scroll.scrollTo(x,y,time)
         },
         finishPullUp(){
-            this.scroll.finishPullUp()
+           this.scroll && this.scroll.finishPullUp()
         },
         refresh(){
-            console.log('----');
+
            this.scroll && this.scroll.refresh()
         }
     }
