@@ -4,8 +4,10 @@
             <div slot="center">购物街</div>
         </nav-bar>
 
-        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow"  :pull-up-load="true" @pullingUp="loadMore">
+        <!-- <home-swiper :banners="banners"/> -->
 
+        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow"  :pull-up-load="true" @pullingUp="loadMore">
+            <home-swiper :banner="banner" ref="hSwiper"></home-swiper>
             <recommend-view :recommends="recommends"/>
             <feature/>
             <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
@@ -20,6 +22,7 @@
 
 <script>
 import NavBar from 'components/common/navbar/NavBar'
+import HomeSwiper from './childComps/HomeSwiper'
 import RecommendView from './childComps/RecommendView'
 import Feature from './childComps/feature'
 import TabControl from 'components/content/tabControl/TabControl'
@@ -33,6 +36,7 @@ export default {
     name:"home",
     components:{
         NavBar,
+        HomeSwiper,
         RecommendView,
         Feature,
         TabControl,
@@ -76,8 +80,6 @@ export default {
      const refresh =  debounce(this.$refs.scroll.refresh)
          //监听ITEM中的图片家宅完成
         this.$bus.$on('itemImageLoad',()=>{
-            // console.log("---")
-            // this.$refs.scroll.refresh()
             refresh()
         })
     },
