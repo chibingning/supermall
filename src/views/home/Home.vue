@@ -4,7 +4,8 @@
             <div slot="center">购物街</div>
         </nav-bar>
 
-        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow">
+        <scroll class="content" ref="scroll" :probe-type="3" @scroll="scrollShow"  :pull-up-load="true"
+        @pullingUp="loadMore">
             <recommend-view :recommends="recommends"/>
             <feature/>
             <tab-control :titles="['流行','精选','时尚']"  @tabClick="tabClick"    />
@@ -12,6 +13,7 @@
         </scroll>
 
         <back-top @click.native="backClick"  v-show="isShow" />
+
   </div>
 </template>
 
@@ -79,6 +81,7 @@ export default {
             getHomeGoods(type,page).then(res=>{
                 this.goods[type].list.push(...res.data.list)
                 this.goods[type].page += 1
+                this.$refs.scroll.finishPullUp()
             })
         },
         tabClick(index){
@@ -100,6 +103,10 @@ export default {
         },
         scrollShow(position){
             this.isShow = -(position.y)>700
+        },
+        loadMore(){
+              this.getHomeGoods(this.currentType)
+              this.$refs.scroll.scroll.refresh()
         }
     }
 }
