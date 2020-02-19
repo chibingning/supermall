@@ -1,5 +1,5 @@
 <template>
-    <div class="goods-list-item">
+    <div class="goods-list-item" @click="itemClick">
         <img :src="goodsItem.show.img"  @load="imgageLoad">
         <div class="goods-infor">
             <p class="title ellipsis">{{goodsItem.title}}</p>
@@ -15,7 +15,9 @@ export default {
         goodsItem:{
             type:Object,
             default(){
-                return {}
+                return {
+
+                }
 
 
             }
@@ -24,7 +26,11 @@ export default {
     methods:{
         imgageLoad(){
             this.$bus.$emit('itemImageLoad')
+        },
+        itemClick(){
+            this.$router.push('/detail/'+this.goodsItem.iid)
         }
+
     }
 }
 </script>
