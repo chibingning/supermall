@@ -46,5 +46,5 @@ export default {
     .go-back img{width: 25px;position: relative; top:7px;}
     .center{ display: flex}
     .center div{flex: 1; font-size:13px;}
-    .center div span.active{ border-bottom:1px solid pink;display: inline-block; color: pink;}
+    .center div span.active{ display: inline-block; color: pink;}
 </style>
