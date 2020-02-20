@@ -20,3 +20,16 @@ export class Goods{  //利用构造函数  把多处的数据整合在一个里�
         this.realPrice = itemInfo.lowNowPrice
     }
 }
+
+
+export class Shop{
+    constructor(shopInfo){
+        this.logo = shopInfo.shopLogo
+        this.name = shopInfo.name
+        this.fans = shopInfo.cFans
+        this.sells = shopInfo.cSells
+        this.score = shopInfo.score
+        this.goodsCount = shopInfo.cGoods
+
+    }
+}
