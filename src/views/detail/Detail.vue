@@ -6,18 +6,20 @@
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo"  @imgload="imgload"/>
+      <detail-goods-params :params-info="paramsInfo"/>
     </scroll>
   </div>
 </template>
 
 <script>
 import DetailNavBar from "./childComps/DetailNavBar";
-import { getDetail, Goods, Shop } from "network/detail";
+import { getDetail, Goods, Shop,ParamsInfo} from "network/detail";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
 import Scroll from "components/common/scroll/Scroll";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
+import DetailGoodsParams from "./childComps/DetailGoodsParams";
 export default {
   name: "Detail",
   components: {
@@ -26,7 +28,8 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     Scroll,
-    DetailGoodsInfo
+    DetailGoodsInfo,
+    DetailGoodsParams
   },
   data() {
     return {
@@ -34,7 +37,8 @@ export default {
       topImg: [],
       goods: {},
       shop: {},
-      detailInfo:{}
+      detailInfo:{},
+      paramsInfo:{}
     };
   },
   created() {
@@ -51,7 +55,9 @@ export default {
         data.shopInfo.services
       );
       this.shop = new Shop(data.shopInfo);
-      this.detailInfo = data.detailInfo
+      this.detailInfo = data.detailInfo;
+      this.paramsInfo = new ParamsInfo(data.itemParams.info,data.itemParams.rule)
+
     })
 
   },
