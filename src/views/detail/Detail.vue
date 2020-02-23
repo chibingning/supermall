@@ -5,23 +5,25 @@
       <detail-swiper :top-img="topImg"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
-      <detail-goods-info :detail-info="detailInfo"  @imgload="imgload"/>
-      <detail-goods-params :params-info="paramsInfo"/>
-      <detail-comment-info :comment-info="commentInfo"/>
+      <detail-goods-info :detail-info="detailInfo" @imgload="imgload" />
+      <detail-goods-params :params-info="paramsInfo" />
+      <detail-comment-info :comment-info="commentInfo" />
+      <goods-list :goods="recommends" />
     </scroll>
   </div>
 </template>
 
 <script>
 import DetailNavBar from "./childComps/DetailNavBar";
-import { getDetail, Goods, Shop,ParamsInfo} from "network/detail";
+import { getDetail, Goods, Shop, ParamsInfo,getRecommend } from "network/detail";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
 import Scroll from "components/common/scroll/Scroll";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailGoodsParams from "./childComps/DetailGoodsParams";
-import DetailCommentInfo from "./childComps/DetailCommentInfo"
+import DetailCommentInfo from "./childComps/DetailCommentInfo";
+import GoodsList from "components/content/goods/GoodsList";
 export default {
   name: "Detail",
   components: {
@@ -32,7 +34,8 @@ export default {
     Scroll,
     DetailGoodsInfo,
     DetailGoodsParams,
-    DetailCommentInfo
+    DetailCommentInfo,
+    GoodsList
   },
   data() {
     return {
@@ -40,16 +43,16 @@ export default {
       topImg: [],
       goods: {},
       shop: {},
-      detailInfo:{},
-      paramsInfo:{},
-      commentInfo:{}
+      detailInfo: {},
+      paramsInfo: {},
+      commentInfo: {},
+      recommends:[]
     };
   },
   created() {
     this.iid = this.$route.params.iid;
     getDetail(this.iid).then(res => {
       const data = res.result;
-      console.log(data);
       //获取顶部的滚动图片
       this.topImg = data.itemInfo.topImages;
       //获取商品信息
@@ -60,21 +63,24 @@ export default {
       );
       this.shop = new Shop(data.shopInfo);
       this.detailInfo = data.detailInfo;
-      this.paramsInfo = new ParamsInfo(data.itemParams.info,data.itemParams.rule)
-        if(data.rate.cRate!== 0){
-            this.commentInfo = data.rate.list[0];
-        }
-
-
-    })
-
-  },
-  methods:{
-      imgload(){
-          this.$refs.scroll.refresh()
+      this.paramsInfo = new ParamsInfo(
+        data.itemParams.info,
+        data.itemParams.rule
+      );
+      if (data.rate.cRate !== 0) {
+        this.commentInfo = data.rate.list[0];
       }
-  }
+    });
 
+    getRecommend().then(res=>{
+        this.recommends = res.data.list
+    })
+  },
+  methods: {
+    imgload() {
+      this.$refs.scroll.refresh();
+    }
+  }
 };
 </script>
 
@@ -87,7 +93,11 @@ export default {
   height: 100vh;
 }
 .content {
-  height:calc(100% - 44px);
+  height: calc(100% - 44px);
 }
-.detail-nav-bar{ position: relative; z-index:10; background-color: #fff;}
+.detail-nav-bar {
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+}
 </style>

@@ -9,6 +9,16 @@ export function getDetail(iid){ //把上个页面的id传过来
 }
 
 
+export function getRecommend(){
+    return request({
+        url:'/recommend',
+        
+    })
+}
+
+
+
+
 export class Goods{  //利用构造函数  把多处的数据整合在一个里面
     constructor(itemInfo,columns,services){
         this.title = itemInfo.title
