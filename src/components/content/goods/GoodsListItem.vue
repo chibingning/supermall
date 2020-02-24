@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-.goods-list-item{ width: 48%;text-align: center; }
+.goods-list-item{ width: 48%;text-align: center; background:#fff; }
 .goods-list-item img{ width: 100%; border-radius:3px;}
 .goods-infor{ position: relative; top:-8px; font-size:14px;  }
 .price,.collect{ position: relative; top:-8px;}

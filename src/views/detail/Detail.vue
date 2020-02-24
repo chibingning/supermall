@@ -1,21 +1,27 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav-bar"></detail-nav-bar>
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-nav-bar" @titleClick="titleClick"></detail-nav-bar>
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
       <detail-swiper :top-img="topImg"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
-      <detail-goods-info :detail-info="detailInfo"  />
-      <detail-goods-params :params-info="paramsInfo" />
-      <detail-comment-info :comment-info="commentInfo" />
-      <goods-list :goods="recommends" />
+      <detail-goods-info :detail-info="detailInfo" @detailImgLoad="detailImgLoad" />
+      <detail-goods-params :params-info="paramsInfo" ref="params" />
+      <detail-comment-info :comment-info="commentInfo" ref="commentInfo" />
+      <goods-list :goods="recommends" ref="recommend" />
     </scroll>
   </div>
 </template>
 
 <script>
 import DetailNavBar from "./childComps/DetailNavBar";
-import { getDetail, Goods, Shop, ParamsInfo,getRecommend } from "network/detail";
+import {
+  getDetail,
+  Goods,
+  Shop,
+  ParamsInfo,
+  getRecommend
+} from "network/detail";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
@@ -24,8 +30,8 @@ import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailGoodsParams from "./childComps/DetailGoodsParams";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
 import GoodsList from "components/content/goods/GoodsList";
-import {debounce} from "common/utils";
-import { itemListenerMixin } from "common/mixin"
+import { debounce } from "common/utils";
+import { itemListenerMixin } from "common/mixin";
 export default {
   name: "Detail",
   components: {
@@ -39,7 +45,7 @@ export default {
     DetailCommentInfo,
     GoodsList
   },
-  mixins:[itemListenerMixin],
+  mixins: [itemListenerMixin],
   data() {
     return {
       iid: null,
@@ -49,8 +55,9 @@ export default {
       detailInfo: {},
       paramsInfo: {},
       commentInfo: {},
-      recommends:[]
-
+      recommends: [],
+      themeTopYs: [],
+      getThemeTopY: null
     };
   },
   created() {
@@ -74,21 +81,37 @@ export default {
       if (data.rate.cRate !== 0) {
         this.commentInfo = data.rate.list[0];
       }
+      //进行防抖操作
+      this.getThemeTopY = debounce(() => {
+        this.themeTopYs = [];
+        this.themeTopYs.push(0);
+        this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.commentInfo.$el.offsetTop);
+        this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
+        console.log(this.themeTopYs);
+      },100);
     });
 
-    getRecommend().then(res=>{
-        this.recommends = res.data.list
-    })
+    getRecommend().then(res => {
+      this.recommends = res.data.list;
+    });
   },
-  mounted(){
-    //  const refresh =  debounce(this.$refs.scroll.refresh)
-    //  this.itemImgListener = ()=>{
-    //       refresh()
-    //   }
-    //   this.$bus.$on('itemImageLoad',this.itemImgListener)
+  mounted() {},
+  destroyed() {
+    this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
-  destroyed(){
-     this.$bus.$off('itemImageLoad',this.itemImgListener)
+  methods: {
+    detailImgLoad() {
+      this.refresh();
+      this.getThemeTopY(); //图片加载完  执行
+    },
+    titleClick(index) {
+      //   console.log(index);
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200);
+    },
+    contentScroll(position){
+        console.log(position)
+    }
   }
 };
 </script>
