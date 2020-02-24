@@ -30,9 +30,9 @@ import TabControl from 'components/content/tabControl/TabControl'
 import GoodList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
 import BackTop from 'components/content/backTop/BackTop'
-
 import {getHomeMultidata,getHomeGoods} from 'network/home'
-import {debounce}from 'common/utils';
+import {debounce}from 'common/utils'
+import { itemListenerMixin} from 'common/mixin'
 export default {
     name:"home",
     components:{
@@ -46,6 +46,7 @@ export default {
         BackTop
 
     },
+    mixins:[itemListenerMixin],
     data(){
         return{
             banner:[],
@@ -64,6 +65,7 @@ export default {
             saveY:0
 
 
+
         }
     },
     computed:{
@@ -72,7 +74,7 @@ export default {
         }
     },
     destroyed(){
-        console.log('home destroyed')
+
     },
     activated(){
 
@@ -80,7 +82,14 @@ export default {
         this.$refs.scroll.refresh()
     },
     deactivated(){
+        //保存Y值
        this.saveY = this.$refs.scroll.getScrollY()
+
+        //取消全局事件的监听  不能只传一个事件（只传一个事件就会把所有的事件给关掉），要传一个函数
+        this.$bus.$off('itemImageLoad',this.itemImgListener)
+
+
+
     },
     created(){
         this.getHomeMultidata()
@@ -90,15 +99,9 @@ export default {
     },
     mounted(){
 
-     const refresh =  debounce(this.$refs.scroll.refresh)
-         //监听ITEM中的图片家宅完成
-        this.$bus.$on('itemImageLoad',()=>{
-            refresh()
-        })
 
-        //获取tabcontrol的offsettop
-        //this.taboffsetTop = this.$refs.TabControl
-        //console.log(this.$refs.tabControl.$el.offsetTop);
+
+
     },
     methods:{
 

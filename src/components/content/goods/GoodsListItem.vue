@@ -26,10 +26,13 @@ export default {
     methods:{
         imgageLoad(){
             this.$bus.$emit('itemImageLoad')
+            // 用路由做判断通知向哪个组件发出事件
+
         },
         itemClick(){
+
             this.$router.push('/detail/'+this.goodsItem.iid)
-            console.log(1)
+
         }
 
     },

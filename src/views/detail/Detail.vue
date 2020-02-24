@@ -5,7 +5,7 @@
       <detail-swiper :top-img="topImg"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
-      <detail-goods-info :detail-info="detailInfo" @imgload="imgload" />
+      <detail-goods-info :detail-info="detailInfo"  />
       <detail-goods-params :params-info="paramsInfo" />
       <detail-comment-info :comment-info="commentInfo" />
       <goods-list :goods="recommends" />
@@ -24,6 +24,8 @@ import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailGoodsParams from "./childComps/DetailGoodsParams";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
 import GoodsList from "components/content/goods/GoodsList";
+import {debounce} from "common/utils";
+import { itemListenerMixin } from "common/mixin"
 export default {
   name: "Detail",
   components: {
@@ -37,6 +39,7 @@ export default {
     DetailCommentInfo,
     GoodsList
   },
+  mixins:[itemListenerMixin],
   data() {
     return {
       iid: null,
@@ -47,6 +50,7 @@ export default {
       paramsInfo: {},
       commentInfo: {},
       recommends:[]
+
     };
   },
   created() {
@@ -76,10 +80,15 @@ export default {
         this.recommends = res.data.list
     })
   },
-  methods: {
-    imgload() {
-      this.$refs.scroll.refresh();
-    }
+  mounted(){
+    //  const refresh =  debounce(this.$refs.scroll.refresh)
+    //  this.itemImgListener = ()=>{
+    //       refresh()
+    //   }
+    //   this.$bus.$on('itemImageLoad',this.itemImgListener)
+  },
+  destroyed(){
+     this.$bus.$off('itemImageLoad',this.itemImgListener)
   }
 };
 </script>
