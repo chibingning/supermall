@@ -1,6 +1,6 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav-bar" @titleClick="titleClick"></detail-nav-bar>
+    <detail-nav-bar class="detail-nav-bar" @titleClick="titleClick" ref="nav"></detail-nav-bar>
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
       <detail-swiper :top-img="topImg"></detail-swiper>
       <detail-base-info :goods="goods" />
@@ -57,7 +57,8 @@ export default {
       commentInfo: {},
       recommends: [],
       themeTopYs: [],
-      getThemeTopY: null
+      getThemeTopY: null,
+      currentIndex:0,
     };
   },
   created() {
@@ -88,7 +89,8 @@ export default {
         this.themeTopYs.push(this.$refs.params.$el.offsetTop);
         this.themeTopYs.push(this.$refs.commentInfo.$el.offsetTop);
         this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
-        console.log(this.themeTopYs);
+        this.themeTopYs.push(Number.MAX_VALUE);
+        console.log(this.themeTopYs)
       },100);
     });
 
@@ -106,11 +108,20 @@ export default {
       this.getThemeTopY(); //图片加载完  执行
     },
     titleClick(index) {
-      //   console.log(index);
       this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200);
     },
     contentScroll(position){
-        console.log(position)
+        const positionY = -position.y
+        let length = this.themeTopYs.length
+        for(let i=0; i<length-1;i++){
+
+            if(this.currentIndex !==i && (positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1])){
+                this.currentIndex = i
+                this.$refs.nav.currentIndex = this.currentIndex
+            }
+
+
+        }
     }
   }
 };
