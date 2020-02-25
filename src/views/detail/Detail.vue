@@ -9,7 +9,9 @@
       <detail-goods-params :params-info="paramsInfo" ref="params" />
       <detail-comment-info :comment-info="commentInfo" ref="commentInfo" />
       <goods-list :goods="recommends" ref="recommend" />
+
     </scroll>
+    <back-top @click.native="backClick" v-show="isShow" />
   </div>
 </template>
 
@@ -32,6 +34,7 @@ import DetailCommentInfo from "./childComps/DetailCommentInfo";
 import GoodsList from "components/content/goods/GoodsList";
 import { debounce } from "common/utils";
 import { itemListenerMixin } from "common/mixin";
+import BackTop from "components/content/backTop/BackTop";
 export default {
   name: "Detail",
   components: {
@@ -43,7 +46,8 @@ export default {
     DetailGoodsInfo,
     DetailGoodsParams,
     DetailCommentInfo,
-    GoodsList
+    GoodsList,
+    BackTop
   },
   mixins: [itemListenerMixin],
   data() {
@@ -58,7 +62,8 @@ export default {
       recommends: [],
       themeTopYs: [],
       getThemeTopY: null,
-      currentIndex:0,
+      currentIndex: 0,
+      isShow: false
     };
   },
   created() {
@@ -90,8 +95,8 @@ export default {
         this.themeTopYs.push(this.$refs.commentInfo.$el.offsetTop);
         this.themeTopYs.push(this.$refs.recommend.$el.offsetTop);
         this.themeTopYs.push(Number.MAX_VALUE);
-        console.log(this.themeTopYs)
-      },100);
+        console.log(this.themeTopYs);
+      }, 100);
     });
 
     getRecommend().then(res => {
@@ -110,18 +115,24 @@ export default {
     titleClick(index) {
       this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 200);
     },
-    contentScroll(position){
-        const positionY = -position.y
-        let length = this.themeTopYs.length
-        for(let i=0; i<length-1;i++){
-
-            if(this.currentIndex !==i && (positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1])){
-                this.currentIndex = i
-                this.$refs.nav.currentIndex = this.currentIndex
-            }
-
-
+    contentScroll(position) {
+      const positionY = -position.y;
+      let length = this.themeTopYs.length;
+      for (let i = 0; i < length - 1; i++) {
+        if (
+          this.currentIndex !== i &&
+          positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i + 1]
+        ) {
+          this.currentIndex = i;
+          this.$refs.nav.currentIndex = this.currentIndex;
         }
+      }
+
+      this.isShow = positionY > 700;
+    },
+
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0);
     }
   }
 };
