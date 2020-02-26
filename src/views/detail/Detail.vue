@@ -2,6 +2,11 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav-bar" @titleClick="titleClick" ref="nav"></detail-nav-bar>
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+        <ul>
+        <li v-for="(item,index) in $store.state.cartList" :key="index">
+            {{item}}
+        </li>
+    </ul>
       <detail-swiper :top-img="topImg"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -9,9 +14,9 @@
       <detail-goods-params :params-info="paramsInfo" ref="params" />
       <detail-comment-info :comment-info="commentInfo" ref="commentInfo" />
       <goods-list :goods="recommends" ref="recommend" />
-
     </scroll>
     <back-top @click.native="backClick" v-show="isShow" />
+    <detail-bottom-bar @addCart="addToCart"/>
   </div>
 </template>
 
@@ -33,8 +38,9 @@ import DetailGoodsParams from "./childComps/DetailGoodsParams";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
 import GoodsList from "components/content/goods/GoodsList";
 import { debounce } from "common/utils";
-import { itemListenerMixin } from "common/mixin";
-import BackTop from "components/content/backTop/BackTop";
+import { itemListenerMixin ,backTopMixin} from "common/mixin";
+import BackTop from "components/content/backTop/BackTop"
+import DetailBottomBar from "./childComps/DetailBottomBar"
 export default {
   name: "Detail",
   components: {
@@ -47,9 +53,10 @@ export default {
     DetailGoodsParams,
     DetailCommentInfo,
     GoodsList,
-    BackTop
+    DetailBottomBar
+
   },
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin,backTopMixin],
   data() {
     return {
       iid: null,
@@ -63,7 +70,6 @@ export default {
       themeTopYs: [],
       getThemeTopY: null,
       currentIndex: 0,
-      isShow: false
     };
   },
   created() {
@@ -80,6 +86,7 @@ export default {
       );
       this.shop = new Shop(data.shopInfo);
       this.detailInfo = data.detailInfo;
+      console.log(this.detailInfo)
       this.paramsInfo = new ParamsInfo(
         data.itemParams.info,
         data.itemParams.rule
@@ -130,10 +137,19 @@ export default {
 
       this.isShow = positionY > 700;
     },
-
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0);
+    addToCart(){
+        //获取商品信息
+        const product = {}
+        product.image = this.topImg[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.newPrice = this.goods.realPrice;
+        product.iid = this.iid;
+        // product.count = 0;
+        this.$store.commit('addCart',product)
     }
+
+
   }
 };
 </script>

@@ -29,10 +29,9 @@ import Feature from './childComps/feature'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
-import BackTop from 'components/content/backTop/BackTop'
 import {getHomeMultidata,getHomeGoods} from 'network/home'
 import {debounce}from 'common/utils'
-import { itemListenerMixin} from 'common/mixin'
+import { itemListenerMixin,backTopMixin} from 'common/mixin'
 export default {
     name:"home",
     components:{
@@ -42,11 +41,11 @@ export default {
         Feature,
         TabControl,
         GoodList,
-        Scroll,
-        BackTop
+        Scroll
+
 
     },
-    mixins:[itemListenerMixin],
+    mixins:[itemListenerMixin,backTopMixin],
     data(){
         return{
             banner:[],
@@ -59,7 +58,6 @@ export default {
                 'sell':{page:0,list:[]},
             },
             currentType:'pop',
-            isShow:false,
             taboffsetTop:0,
             isTabFixed:false,
             saveY:0
@@ -139,9 +137,7 @@ export default {
             this.$refs.tabControl1.currentIndex = index;
             this.$refs.tabControl2.currentIndex = index;
         },
-        backClick(){
-            this.$refs.scroll.scrollTo(0,0)
-        },
+
         scrollShow(position){
             //判断topback是否显示
             this.isShow = -(position.y)>700

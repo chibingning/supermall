@@ -31,7 +31,7 @@ export default {
 }
 </script>
 <style scoped>
-    .tab-control{ display: flex;height: 40px; line-height: 40px; margin-top:5px; background:#fff;}
+    .tab-control{ display: flex;height: 40px; line-height: 40px;  background:#fff;}
     .tab-control-item{ flex:1; text-align: center; font-size:14px;}
     .active span{ color:pink; border-bottom:2px solid pink; padding:4px;}
 </style>
