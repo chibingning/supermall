@@ -2,11 +2,6 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav-bar" @titleClick="titleClick" ref="nav"></detail-nav-bar>
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
-        <ul>
-        <li v-for="(item,index) in $store.state.cartList" :key="index">
-            {{item}}
-        </li>
-    </ul>
       <detail-swiper :top-img="topImg"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -145,8 +140,8 @@ export default {
         product.desc = this.goods.desc;
         product.newPrice = this.goods.realPrice;
         product.iid = this.iid;
-        // product.count = 0;
-        this.$store.commit('addCart',product)
+        // this.$store.commit('addCart',product)
+        this.$store.dispatch('addCart',product)
     }
 
 
