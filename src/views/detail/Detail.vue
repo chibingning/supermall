@@ -12,6 +12,7 @@
     </scroll>
     <back-top @click.native="backClick" v-show="isShow" />
     <detail-bottom-bar @addCart="addToCart"/>
+    <toast/>
   </div>
 </template>
 
@@ -36,6 +37,8 @@ import { debounce } from "common/utils";
 import { itemListenerMixin ,backTopMixin} from "common/mixin";
 import BackTop from "components/content/backTop/BackTop"
 import DetailBottomBar from "./childComps/DetailBottomBar"
+import Toast from "components/common/toast/Toast"
+//import { mapActions} from "vuex"  映射actions
 export default {
   name: "Detail",
   components: {
@@ -48,7 +51,8 @@ export default {
     DetailGoodsParams,
     DetailCommentInfo,
     GoodsList,
-    DetailBottomBar
+    DetailBottomBar,
+    Toast
 
   },
   mixins: [itemListenerMixin,backTopMixin],
@@ -110,6 +114,7 @@ export default {
     this.$bus.$off("itemImageLoad", this.itemImgListener);
   },
   methods: {
+      //...mapActions(['addCart']),  映射的是函数，所以写在methods中
     detailImgLoad() {
       this.refresh();
       this.getThemeTopY(); //图片加载完  执行
@@ -140,8 +145,17 @@ export default {
         product.desc = this.goods.desc;
         product.newPrice = this.goods.realPrice;
         product.iid = this.iid;
-        // this.$store.commit('addCart',product)
-        this.$store.dispatch('addCart',product)
+
+        // this.addCart(product).then(res =>{
+        //     console.log(res)
+        // })  通过映射来
+        this.$store.dispatch('addCart',product).then(res=>{
+             this.$toast.show(res,2000)
+            // console.log(this.$toast)
+
+        })
+
+
     }
 
 

@@ -6,10 +6,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-
+import Toast from 'components/common/toast'
 
 
 Vue.config.productionTip = false
+
+//安装toast插件
+Vue.use(Toast)
+
 
 
 Vue.prototype.$bus = new Vue()
